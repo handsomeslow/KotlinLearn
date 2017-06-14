@@ -5,23 +5,13 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
 class MainActivity : AppCompatActivity() {
-
-    val items = listOf(
-            "给初学者的RxJava2.0教程（七）: Flowable",
-            "Android之View的诞生之谜",
-            "Android之自定义View的死亡三部曲之Measure",
-            "Using ThreadPoolExecutor in Android ",
-            "Kotlin 泛型定义与 Java 类似，但有着更多特性支持。",
-            "Android异步的姿势，你真的用对了吗？",
-            "Android 高质量录音库。",
-            "Android 边缘侧滑效果，支持多种场景下的侧滑退出。"
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +27,26 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadList() = doAsync {
-        val result = getLinks("http://gank.io/")
+        val result = getLinks("http://www.cnbeta.com/")
         uiThread {
-            recyclerView.adapter = MainAdapter(result)
+            recyclerView.adapter = MainAdapter(result) {
+                toast(it.url)
+            }
         }
     }
 
-    private fun getLinks(url :String): ArrayList<String>{
-        val links = ArrayList<String>()
+    private fun getLinks(url :String): ArrayList<News>{
+        val links = ArrayList<News>()
         val doc: Document = Jsoup.connect(url).get()
-        val elements: Elements = doc.select("div.outlink").first().allElements
+        val elements: Elements = doc.select("div.items-area").first().allElements.first().children()
+
         for (e in elements) {
             //links.add("11"+e.attr("href"))
-            links.add(e.text())
+            if (e.getElementsByTag("dt").text().isEmpty())
+                continue
+            links.add(News(e.getElementsByTag("dt").text(),
+                    e.getElementsByTag("dd").text(),
+                    e.getElementsByTag("dt").attr("a")))
         }
         return links
     }
