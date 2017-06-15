@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_view_list_layout.view.*
 
 /**
@@ -28,6 +29,13 @@ class MainAdapter(val items : List<News>, val itemClickListener: (News)->Unit) :
         fun bind(news: News) {
             view.title.text = news.title
             view.desc.text = news.desc
+            if (news.image.isNotEmpty()) {
+                Glide.with(view.context).load(news.image).into(view.image)
+                view.image.visibility = View.VISIBLE
+            } else{
+                view.image.visibility = View.GONE
+            }
+
             view.setOnClickListener {
                 itemClickListener(news)
             }

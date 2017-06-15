@@ -1,5 +1,7 @@
 package com.jun.kotlinlearn
 
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -30,7 +32,11 @@ class MainActivity : AppCompatActivity() {
         val result = getLinks("http://www.cnbeta.com/")
         uiThread {
             recyclerView.adapter = MainAdapter(result) {
-                toast(it.url)
+                val url = "http://m.cnbeta.com/view"+it.url.substring(it.url.lastIndexOf("/"))
+                val intent = Intent()
+                intent.setClass(this@MainActivity,WebActivity::class.java)
+                intent.putExtra("url",url)
+                startActivity(intent)
             }
         }
     }
@@ -41,12 +47,12 @@ class MainActivity : AppCompatActivity() {
         val elements: Elements = doc.select("div.items-area").first().allElements.first().children()
 
         for (e in elements) {
-            //links.add("11"+e.attr("href"))
             if (e.getElementsByTag("dt").text().isEmpty())
                 continue
             links.add(News(e.getElementsByTag("dt").text(),
                     e.getElementsByTag("dd").text(),
-                    e.getElementsByTag("dt").attr("a")))
+                    e.select("a[href]").first().attr("href"),
+                    e.select("img[src]").first().attr("src")))
         }
         return links
     }
