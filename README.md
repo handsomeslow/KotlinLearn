@@ -1,6 +1,7 @@
 # Kotlin学习demo
 
-[Kotlin](https://www.gitbook.com/book/huanglizhuo/kotlin-in-chinese/details)
-[Jsoup](http://www.open-open.com/jsoup/)
+* [Kotlin](https://www.gitbook.com/book/huanglizhuo/kotlin-in-chinese/details)
 
-![截图](./shot/main_shot.jpg)
+* [Jsoup](http://www.open-open.com/jsoup/)
+
+![截图](./shot/list_shot.jpg)
