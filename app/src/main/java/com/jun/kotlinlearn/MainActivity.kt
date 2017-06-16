@@ -1,60 +1,61 @@
 package com.jun.kotlinlearn
 
-import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
+import android.view.MenuItem
+import com.ashokvarma.bottomnavigation.BottomNavigationBar
+import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,BottomNavigationBar.OnTabSelectedListener,ViewPager.OnPageChangeListener{
+
+    private val fragments: ArrayList<Fragment> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
+        initMainView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadList()
+    private fun initMainView() {
+        fragments.add(NewsListFragment.newInstace())
+        fragments.add(AboutFragment.newInstace())
+
+        val mainAdapter = MainViewPagerAdapter(this.supportFragmentManager,fragments)
+        mainViewPager.adapter = mainAdapter
+        mainViewPager.addOnPageChangeListener(this)
+        bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
+        bottomBar.setMode(BottomNavigationBar.MODE_SHIFTING)
+        bottomBar.addItem(BottomNavigationItem(R.drawable.contacts,"新闻"))
+                .addItem(BottomNavigationItem(R.drawable.settings,"设置"))
+                .setActiveColor(R.color.colorPrimary)
+                .setFirstSelectedPosition(0)
+                .initialise()
+
+        bottomBar.setTabSelectedListener(this)
+    }
+
+    override fun onTabSelected(position: Int) {
+        mainViewPager.currentItem = position
+    }
+
+    override fun onTabReselected(position: Int) {
+    }
+
+    override fun onTabUnselected(position: Int) {
     }
 
 
-    private fun loadList() = doAsync {
-        val result = getLinks("http://www.cnbeta.com/")
-        uiThread {
-            recyclerView.adapter = MainAdapter(result) {
-                val url = "http://m.cnbeta.com/view"+it.url.substring(it.url.lastIndexOf("/"))
-                val intent = Intent()
-                intent.setClass(this@MainActivity,WebActivity::class.java)
-                intent.putExtra("url",url)
-                startActivity(intent)
-            }
-        }
+    override fun onPageScrollStateChanged(state: Int) {
     }
 
-    private fun getLinks(url :String): ArrayList<News>{
-        val links = ArrayList<News>()
-        val doc: Document = Jsoup.connect(url).get()
-        val elements: Elements = doc.select("div.items-area").first().allElements.first().children()
-
-        for (e in elements) {
-            if (e.getElementsByTag("dt").text().isEmpty())
-                continue
-            links.add(News(e.getElementsByTag("dt").text(),
-                    e.getElementsByTag("dd").text(),
-                    e.select("a[href]").first().attr("href"),
-                    e.select("img[src]").first().attr("src")))
-        }
-        return links
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
+    override fun onPageSelected(position: Int) {
+        bottomBar.selectTab(position)
+    }
 }
