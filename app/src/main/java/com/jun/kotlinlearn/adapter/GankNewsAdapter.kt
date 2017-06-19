@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.jun.kotlinlearn.entity.GankNews
 import com.jun.kotlinlearn.R
 import kotlinx.android.synthetic.main.item_view_list_layout.view.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 /**
  * Desc
@@ -28,7 +30,7 @@ class GankNewsAdapter(val items : List<GankNews>, val itemClickListener: (GankNe
     class ViewHolder(val view: View, val itemClickListener: (GankNews) -> Unit) : RecyclerView.ViewHolder(view) {
         fun bind(news: GankNews) {
             view.title.text = news.desc
-            view.desc.text = news.type
+            view.desc.text = "${news.type}   ${news.who}  ${SimpleDateFormat("yyyy-MM-dd").format(news.publishedAt)}"
             view.setOnClickListener {
                 itemClickListener(news)
             }

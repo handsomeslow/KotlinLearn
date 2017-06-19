@@ -2,14 +2,20 @@ package com.jun.kotlinlearn.fragment
 
 
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.jun.kotlinlearn.activity.WebActivity
 import com.jun.kotlinlearn.adapter.MainAdapter
 import com.jun.kotlinlearn.entity.News
 import kotlinx.android.synthetic.main.fragment_news_list_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.jsoup.Jsoup
+import com.jun.kotlinlearn.R
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
@@ -26,12 +32,12 @@ class NewsListFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: android.view.LayoutInflater?, container: android.view.ViewGroup?,
-                              savedInstanceState: android.os.Bundle?): android.view.View? {
-        return inflater!!.inflate(com.jun.kotlinlearn.R.layout.fragment_news_list_layout, container, false)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater!!.inflate(R.layout.fragment_news_list_layout, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: android.os.Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         loadList()
@@ -52,7 +58,7 @@ class NewsListFragment : Fragment() {
 
     private fun getLinks(url :String): ArrayList<News>{
         val links = ArrayList<News>()
-        val doc: Document = org.jsoup.Jsoup.connect(url).get()
+        val doc: Document = Jsoup.connect(url).get()
         val elements: Elements = doc.select("div.items-area").first().allElements.first().children()
 
         for (e in elements) {
