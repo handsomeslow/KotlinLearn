@@ -1,7 +1,8 @@
-package com.jun.kotlinlearn
+package com.jun.kotlinlearn.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.jun.kotlinlearn.R
 import kotlinx.android.synthetic.main.activity_web_layout.*
 
 class WebActivity : AppCompatActivity() {

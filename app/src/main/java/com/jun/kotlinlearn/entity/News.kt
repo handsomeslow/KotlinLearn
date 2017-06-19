@@ -1,4 +1,4 @@
-package com.jun.kotlinlearn
+package com.jun.kotlinlearn.entity
 
 /**
  * Created by Jun on 2017/6/14.

@@ -1,4 +1,4 @@
-package com.jun.kotlinlearn
+package com.jun.kotlinlearn.fragment
 
 
 import android.support.v4.app.Fragment
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.jun.kotlinlearn.R
 
 
 /**
@@ -14,7 +15,7 @@ import android.view.ViewGroup
 class AboutFragment : Fragment() {
 
     companion object {
-        fun newInstace() : AboutFragment {
+        fun newInstance() : AboutFragment {
             val fragment = AboutFragment()
             return fragment
         }

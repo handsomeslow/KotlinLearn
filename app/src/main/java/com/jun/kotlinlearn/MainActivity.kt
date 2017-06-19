@@ -2,12 +2,14 @@ package com.jun.kotlinlearn
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.view.MenuItem
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
+import com.jun.kotlinlearn.adapter.MainViewPagerAdapter
+import com.jun.kotlinlearn.fragment.AboutFragment
+import com.jun.kotlinlearn.fragment.GankNewsFragment
+import com.jun.kotlinlearn.fragment.NewsListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() ,BottomNavigationBar.OnTabSelectedListener,ViewPager.OnPageChangeListener{
@@ -21,8 +23,9 @@ class MainActivity : AppCompatActivity() ,BottomNavigationBar.OnTabSelectedListe
     }
 
     private fun initMainView() {
-        fragments.add(NewsListFragment.newInstace())
-        fragments.add(AboutFragment.newInstace())
+        fragments.add(NewsListFragment.newInstance())
+        fragments.add(GankNewsFragment.newInstance())
+        fragments.add(AboutFragment.newInstance())
 
         val mainAdapter = MainViewPagerAdapter(this.supportFragmentManager,fragments)
         mainViewPager.adapter = mainAdapter
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() ,BottomNavigationBar.OnTabSelectedListe
         bottomBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
         bottomBar.setMode(BottomNavigationBar.MODE_SHIFTING)
         bottomBar.addItem(BottomNavigationItem(R.drawable.contacts,"新闻"))
+                .addItem(BottomNavigationItem(R.drawable.contacts,"Gank"))
                 .addItem(BottomNavigationItem(R.drawable.settings,"设置"))
                 .setActiveColor(R.color.colorPrimary)
                 .setFirstSelectedPosition(0)
